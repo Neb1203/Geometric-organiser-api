@@ -5,7 +5,6 @@ from fastapi import FastAPI
 app = FastAPI()
 player_details = PlayerDetails()
 
-
 @app.post("/player_details/")
 async def post_player_details(user_name: str, email: str, password: str):
     return player_details.write(user_name, email, password)
