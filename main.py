@@ -1,10 +1,11 @@
+import os
+
 import uvicorn
 from controllers.PlayerDetails import PlayerDetails
 from fastapi import FastAPI
 
 app = FastAPI()
 player_details = PlayerDetails()
-
 @app.get("/player_details/")
 async def get_player_details(email: str, password: str):
     return player_details.read(email, password)
