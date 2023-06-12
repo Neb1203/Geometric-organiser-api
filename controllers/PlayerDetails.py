@@ -1,3 +1,5 @@
+import secrets
+
 from fastapi import FastAPI
 from controllers.DBConnect import DBConnect
 import hashlib
@@ -29,9 +31,10 @@ class PlayerDetails:
         salt = b']:\xfb+\x9e\xa8\x9e4\x16\x0eo\x0f;\xd5\xee\xed%\xc7\xe9\xcc/\xeb|J\xed\xcc\xdf\xe7\x01\x01\xcb\xf9'
         passwordHash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 10000)
         hexHash = passwordHash.hex()
+        token = secrets.token_urlsafe(48)
 
-        qry = "INSERT INTO playerDetails (userName, password, email) VALUES (%s, %s, %s)"
-        data = (user_name, hexHash, email)
+        qry = "INSERT INTO playerDetails (token, userName, password, email) VALUES (%s, %s, %s, %s)"
+        data = (token, user_name, hexHash, email)
 
         self.db_connect.cursor.execute(qry, data)
         self.db_connect.cnx.commit()
