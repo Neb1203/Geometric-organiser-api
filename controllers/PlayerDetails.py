@@ -12,19 +12,21 @@ class PlayerDetails:
         qry = """SELECT JSON_OBJECT(
             'id', id,
             'email', email,
-            'user_id', userId,
+            'token', token,
             'username', userName,
             'password', password,
             'email', email
         ) FROM playerDetails
         WHERE email=%s AND password = %s
         LIMIT 1"""
-        data = (email, password)
+        hashPassword = hashSalt(password)
+        data = (email, hashPassword)
 
         self.db_connect.cursor.execute(qry, data)
-        json_result = self.db_connect.cursor.fetchall()
+        json_result = self.db_connect.cursor.fetchone()[0]
         self.db_connect.cursor.reset()
         return json_result
+
 
     def write(self, user_name, email, password):
         hexHash = hashSalt(password)
