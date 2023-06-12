@@ -2,12 +2,11 @@ import secrets
 
 from fastapi import FastAPI
 from controllers.DBConnect import DBConnect
-import hashlib
-from dotenv import load_dotenv
-import os
+from controllers.hashSalt import hashSalt
 class PlayerDetails:
     app = FastAPI()
     db_connect = DBConnect()
+        # hashSalt = hashSalt()
 
     def read(self, email, password):
         qry = """SELECT JSON_OBJECT(
@@ -28,9 +27,7 @@ class PlayerDetails:
         return json_result
 
     def write(self, user_name, email, password):
-        salt = b']:\xfb+\x9e\xa8\x9e4\x16\x0eo\x0f;\xd5\xee\xed%\xc7\xe9\xcc/\xeb|J\xed\xcc\xdf\xe7\x01\x01\xcb\xf9'
-        passwordHash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 10000)
-        hexHash = passwordHash.hex()
+        hexHash = hashSalt(password)
         token = secrets.token_urlsafe(48)
 
         qry = "INSERT INTO playerDetails (token, userName, password, email) VALUES (%s, %s, %s, %s)"
