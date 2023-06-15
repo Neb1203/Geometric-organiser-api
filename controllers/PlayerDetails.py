@@ -6,7 +6,6 @@ from controllers.hashSalt import hashSalt
 class PlayerDetails:
     app = FastAPI()
     db_connect = DBConnect()
-        # hashSalt = hashSalt()
 
     def read(self, email, password):
         qry = """SELECT JSON_OBJECT(
