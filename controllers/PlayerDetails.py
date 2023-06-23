@@ -26,12 +26,13 @@ class PlayerDetails:
 
         row = self.db_connect.cursor.fetchone()  # Fetch the first row
 
+        response = {}
         if row is not None:
             json_object = row[0]  # Retrieve the JSON object as a string
             parsed_json = json.loads(json_object)  # Parse the JSON string into a Python object
-
-            self.user_name_value = parsed_json['username']  # Access the value of the 'token' key
-            return self.user_name_value
+            response['username'] = parsed_json['username']
+            response['token'] = parsed_json['token']
+            return response
         else:
             return None
     def write(self, user_name, email, password):
@@ -45,4 +46,3 @@ class PlayerDetails:
         self.db_connect.cnx.commit()
 
         self.db_connect.cursor.reset()
-        return "success"
