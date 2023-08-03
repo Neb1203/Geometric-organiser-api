@@ -14,7 +14,6 @@ class PlayerDetails:
             'token', token,
             'username', userName,
             'password', password,
-            'email', email
         ) FROM playerDetails
         WHERE email=%s AND password = %s
         LIMIT 1"""
