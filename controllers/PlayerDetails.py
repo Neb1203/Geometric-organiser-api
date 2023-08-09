@@ -31,16 +31,24 @@ class PlayerDetails:
                     'high_score', p.highScore,
                     'deaths', p.deaths,
                     'average_score', p.averageScore
+                ),
+                'session', JSON_OBJECT(
+                    'id', sess.ID,
+                    'player_details_id', sess.playerDetailsID,
+                    'game_saves_id', sess.gameSavesID
                 )
             )
             FROM playerDetails pd
             LEFT JOIN settingsave s ON s.ID = pd._fk_settingsave
             LEFT JOIN playerstatistics p ON p.ID = pd._fk_player_statistics
+            LEFT JOIN session sess ON sess.playerDetailsID = pd._fk_session
             WHERE pd.email = %s AND pd.password = %s
             LIMIT 1
         """
+
         hashPassword = hashSalt(password)
         data = (email, hashPassword)
+
         self.db_connect.cursor.execute(qry, data)
         self.db_connect.cursor.reset()
 
