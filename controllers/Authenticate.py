@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from controllers.hashSalt import hashSalt
 import secrets
 import requests
+import datetime
 class Authenticate:
     app = FastAPI()
     db_connect = DBConnect()
@@ -23,17 +24,16 @@ class Authenticate:
 
         record = self.db_connect.cursor.fetchone()
         if record != None:
-            return record
-            # token = secrets.token_urlsafe(48)
-            # date = 1
-            #
-            # qry = "INSERT INTO session (createdAt, sessionToken) VALUES (%s, %s)"
-            # data = (token, date)
-            #
-            # self.db_connect.cursor.execute(qry, data)
-            # self.db_connect.cnx.commit()
-            #
-            # self.db_connect.cursor.reset()
+            token = secrets.token_urlsafe(24)
+
+            qry = "INSERT INTO session (loginDate, sessionToken) VALUES (%s, %s)"
+            data = (datetime.datetime.now(), token)
+
+            self.db_connect.cursor.execute(qry, data)
+            self.db_connect.cnx.commit()
+
+            self.db_connect.cursor.reset()
+            return token
         else:
             return "Account doesn't exist"
 
