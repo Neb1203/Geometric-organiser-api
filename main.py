@@ -2,20 +2,31 @@ import os
 
 import uvicorn
 from controllers.Authenticate import Authenticate
+from controllers.login import Login
 from controllers.PlayerDetails import PlayerDetails
 
-from fastapi import FastAPI
+from fastapi import *
 
 app = FastAPI()
 player_details = PlayerDetails()
 authenticate = Authenticate()
+login = Login()
 
 @app.post("/authenticate/")
 async def post_authenticate(email: str, password: str):
     return authenticate.index(email, password)
 @app.get("/validate/")
-async def validation(sessionToken: str):
-    return authenticate.validate(sessionToken)
+async def validation(sessionToken: str, response: Response):
+    validateToken = authenticate.validate(sessionToken)
+    if not validateToken:
+        response.status_code = 422
+        return "Not logged in"
+    return "Logged in"
+
+
+@app.get("/fetchUsername/")
+async def username():
+    return login.username()
 
 @app.get("/player_details/")
 async def get_player_details(email: str, password: str):

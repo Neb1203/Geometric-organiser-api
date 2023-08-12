@@ -41,7 +41,7 @@ class PlayerDetails:
             FROM playerDetails pd
             LEFT JOIN settingsave s ON s.ID = pd._fk_settingsave
             LEFT JOIN playerstatistics p ON p.ID = pd._fk_player_statistics
-            LEFT JOIN session sess ON sess.playerDetailsID = pd._fk_session
+            LEFT JOIN gameprofilelink sess ON sess.playerDetailsID = pd._fk_session
             WHERE pd.email = %s AND pd.password = %s
             LIMIT 1
         """

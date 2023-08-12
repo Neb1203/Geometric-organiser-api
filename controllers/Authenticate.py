@@ -47,17 +47,20 @@ class Authenticate:
 
         # if logd in add a new record to session table
     def validate(self, sessionToken):
+        # A day
+        expiryTime = 240000
         qry = """
-            SELECT loginDate
+            SELECT NOW() - loginDate as timeSinceSessionCreation
             FROM session
             WHERE sessionToken = %s
             LIMIT 1
         """
         self.db_connect.cursor.execute(qry, (sessionToken,))
-        self.db_connect.cursor.reset()
+
         record = self.db_connect.cursor.fetchone()
-        print("validate", record)
-        print(record)
-        return record
+        self.db_connect.cursor.reset()
+        if record[0] > expiryTime:
+            return False
+        return True
 
 
