@@ -37,4 +37,4 @@ async def post_player_details(user_name: str, email: str, password: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.2", port=5000, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=5000, log_level="info")
