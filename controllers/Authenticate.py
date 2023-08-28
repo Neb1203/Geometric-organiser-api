@@ -34,8 +34,6 @@ class Authenticate:
             self.db_connect.cnx.commit()
 
             self.db_connect.cursor.reset()
-            with open("tokens.txt", "a") as file:
-                file.write(token + "\n")
             return token
         else:
             return "Account doesn't exist"
