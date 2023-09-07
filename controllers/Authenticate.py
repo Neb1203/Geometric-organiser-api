@@ -2,7 +2,6 @@ from controllers.DBConnect import DBConnect
 from fastapi import FastAPI
 from controllers.hashSalt import hashSalt
 import secrets
-import requests
 from datetime import datetime, timedelta
 class Authenticate:
     app = FastAPI()
