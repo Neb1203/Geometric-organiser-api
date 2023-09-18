@@ -11,23 +11,22 @@ class Authenticate:
         print("running", email, password)
         qry = """
                     SELECT ID
-                    FROM playerDetails pd
-                    WHERE pd.email = %s AND pd.password = %s
+                    FROM playerDetails
+                    WHERE email = %s AND password = %s
                     LIMIT 1
                 """
-
         hashPassword = hashSalt(password)
         data = (email, hashPassword)
 
         self.db_connect.cursor.execute(qry, data)
-        self.db_connect.cursor.reset()
 
-        record = self.db_connect.cursor.fetchone()
-        if record != None:
+        playerId = self.db_connect.cursor.fetchone()
+        self.db_connect.cursor.reset()
+        if playerId != None:
             token = secrets.token_urlsafe(24)
 
-            qry = "INSERT INTO session (loginDate, sessionToken) VALUES (%s, %s)"
-            data = (datetime.now(), token)
+            qry = "INSERT INTO session (loginDate, sessionToken, playerId) VALUES (%s, %s, %s)"
+            data = (datetime.now(), token, playerId[0])
 
             self.db_connect.cursor.execute(qry, data)
             self.db_connect.cnx.commit()
@@ -58,7 +57,7 @@ class Authenticate:
 
         record = self.db_connect.cursor.fetchone()
         self.db_connect.cursor.reset()
-        if record[0] > expiryTime:
+        if record == None or record[0] > expiryTime:
             return False
         return True
 
