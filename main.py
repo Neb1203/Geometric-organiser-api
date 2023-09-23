@@ -2,6 +2,7 @@ import os
 
 import uvicorn
 from controllers.Authenticate import Authenticate
+from controllers.GameSaves import GameSaves
 from controllers.login import Login
 from controllers.PlayerDetails import PlayerDetails
 
@@ -11,6 +12,7 @@ app = FastAPI()
 player_details = PlayerDetails()
 authenticate = Authenticate()
 login = Login()
+gameSaves = GameSaves()
 
 @app.post("/authenticate/")
 async def post_authenticate(email: str, password: str):
@@ -23,6 +25,9 @@ async def validation(sessionToken: str, response: Response):
         return "Not logged in"
     return "Logged in"
 
+@app.post("/game_saves/")
+async def gameSave(mode: str, score: int, session: str, campaignLevel= None, campaignWinOrLoss=None):
+    return gameSaves.store(mode, score, session, campaignLevel, campaignWinOrLoss)
 
 @app.get("/fetchUsername/")
 async def username():
