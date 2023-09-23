@@ -45,3 +45,10 @@ class PlayerDetails:
         result = self.db_connect.cursor.fetchone()
         self.db_connect.cursor.reset()
         return result
+
+    def getPlayerId(self, session: str):
+        playerDetails = self.readSession(session)
+        if len(playerDetails) == 0:
+            return None
+
+        return playerDetails[3]

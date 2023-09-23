@@ -29,6 +29,9 @@ async def validation(sessionToken: str, response: Response):
 @app.post("/game_saves/")
 async def gameSave(mode: str, score: int, session: str, duration, campaignLevel= None, campaignWinOrLoss=None):
     return gameSaves.store(mode, score, session, duration, campaignLevel, campaignWinOrLoss)
+@app.get("/game_saves/")
+async def gameSave(session: str):
+    return gameSaves.get(session)
 
 @app.get("/fetchUsername/")
 async def username():
