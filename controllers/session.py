@@ -34,3 +34,14 @@ class PlayerDetails:
         self.db_connect.cursor.close()
         self.db_connect.cnx.close()
         return "success"
+
+    def readSession(self, session: str) -> tuple:
+        qry = """SELECT * FROM session
+                WHERE sessionToken=%s
+                LIMIT 1"""
+        data = [session]
+
+        self.db_connect.cursor.execute(qry, data)
+        result = self.db_connect.cursor.fetchone()
+        self.db_connect.cursor.reset()
+        return result
