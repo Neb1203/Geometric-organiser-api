@@ -27,8 +27,8 @@ async def validation(sessionToken: str, response: Response):
     return "Logged in"
 
 @app.post("/game_saves/")
-async def gameSave(mode: str, score: int, session: str, duration, campaignLevel= None, campaignWinOrLoss=None):
-    return gameSaves.store(mode, score, session, duration, campaignLevel, campaignWinOrLoss)
+async def gameSave(mode: str, score: int, session: str, duration, campaignLevel= None):
+    return gameSaves.store(mode, score, session, duration, campaignLevel)
 @app.get("/game_saves/")
 async def gameSave(session: str):
     return gameSaves.get(session)

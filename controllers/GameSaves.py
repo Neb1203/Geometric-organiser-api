@@ -11,7 +11,7 @@ class GameSaves:
     db_connect = DBConnect()
     session = PlayerDetails()
 
-    def store(self, mode: str, score: int, session: str, duration: time, campaignLevel, campaignWinOrLoss):
+    def store(self, mode: str, score: int, session: str, duration: time, campaignLevel):
         playerId = self.session.getPlayerId(session)
         if playerId == None:
             return
@@ -24,10 +24,10 @@ class GameSaves:
 
         if mode == "CAMPAIGN":
             qry = """
-                    INSERT INTO gamesaves (mode, score, fkPlayerId, duration, campaignLevel, campaignWinOrloss)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO gamesaves (mode, score, fkPlayerId, duration, campaignLevel)
+                    VALUES (%s, %s, %s, %s, %s)
                 """
-            data = [mode, score, playerId, duration, campaignLevel, campaignWinOrLoss]
+            data = [mode, score, playerId, duration, campaignLevel]
         self.db_connect.cursor.execute(qry, data)
 
         self.db_connect.cnx.commit()
@@ -45,7 +45,6 @@ class GameSaves:
                     'campaignLevel', campaignLevel,
                     'mode', mode,
                     'score', score,
-                    'campaignWinOrLoss', campaignWinOrLoss,
                     'duration', duration,
                     'fkPlayerId', fkPlayerId
                 )
